@@ -1,6 +1,6 @@
 import React from 'react'
 
-type TaskType = {
+export type TaskType = {
     id: number,
     text: string
     isDone: boolean

@@ -1,17 +1,33 @@
 import React from 'react'
+import {FilterValuesType} from "./App";
 
 export type TaskType = {
     id: number,
-    text: string
+    title: string
     isDone: boolean
 }
 
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType>
+    removeTask: (taskID: number) => void
+    changeFilter: (filter: FilterValuesType) => void
 }
 
 const TodoList = (props: TodoListPropsType) => {
+    const tasksListItems = props.tasks.length ?
+        props.tasks.map(task => {
+            const removeTask = () => props.removeTask(task.id)
+            return (
+                <li key={task.id}>
+                    <input type="checkbox" checked={task.isDone}/>
+                    <span>{task.title}</span>
+                    <button onClick={removeTask}>X</button>
+                </li>
+            )
+        })
+        : <span>Your taskList is empty</span>
+
     return (
         <div>
             <h3>{props.title}</h3>
@@ -20,17 +36,12 @@ const TodoList = (props: TodoListPropsType) => {
                 <button>+</button>
             </div>
             <ul>
-                <li key={props.tasks[0].id}><input type="checkbox" checked={props.tasks[0].isDone}/>
-                    <span>{props.tasks[0].text}</span></li>
-                <li><input key={props.tasks[1].id} type="checkbox" checked={props.tasks[1].isDone}/>
-                    <span>{props.tasks[1].text}</span></li>
-                <li><input key={props.tasks[2].id} type="checkbox" checked={props.tasks[2].isDone}/>
-                    <span>{props.tasks[2].text}</span></li>
+                {tasksListItems}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={() => props.changeFilter('all')}>All</button>
+                <button onClick={() => props.changeFilter('active')}>Active</button>
+                <button onClick={() => props.changeFilter('completed')}>Completed</button>
             </div>
         </div>
     )

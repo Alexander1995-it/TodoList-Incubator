@@ -14,14 +14,12 @@ function App() {
         {id: v1(), title: 'JS', isDone: true},
         {id: v1(), title: 'React', isDone: true}
     ])
-
     const [filter, setFilter] = useState<FilterValuesType>('all')
 
     const removeTask = (taskID: string) => {
         const updateTasks = tasks.filter(task => task.id !== taskID)
         setTasks(updateTasks)
     }
-
     const addTask = (title: string) => {
         const newTask: TaskType = {
             id: v1(),
@@ -30,10 +28,13 @@ function App() {
         }
         setTasks([newTask, ...tasks])
     }
-
     const changeFilter = (filter: FilterValuesType) => {
         setFilter(filter)
     }
+    const changeTaskStatus = (taskID: string, isDone: boolean) => {
+        setTasks(tasks.map (t => t.id === taskID ? {...t, isDone: isDone} : t ))
+    }
+
 
     let tasksForRender
     switch (filter) {
@@ -54,6 +55,8 @@ function App() {
                       removeTask={removeTask}
                       changeFilter={changeFilter}
                       addTask={addTask}
+                      changeTaskStatus={changeTaskStatus}
+                      filter={filter}
             />
         </div>
     );

@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from 'react';
+import {Button, TextField} from "@mui/material";
 
 type AddItemFormPropsType = {
     callBack: (title: string) => void
@@ -37,12 +38,24 @@ const AddItemForm = (props: AddItemFormPropsType) => {
 
     return (
         <div>
-            <input value={title}
-                   onChange={onChangeHandler}
-                   // onKeyPress={onKeyPressHandler}
-                   className={error ? "error" : ""}
-            />
-            <button onClick={onClickHandler}>+</button>
+            <TextField
+                // className={error ? "error" : ""}
+                // onKeyPress={onKeyPressHandler}
+                size={'small'}
+                onChange={onChangeHandler}
+                value={title}
+                id="outlined-basic"
+                label="Outlined"
+                variant="outlined" />
+            <Button
+                onClick={onClickHandler}
+                variant="contained"
+                style={{maxWidth: '38px', maxHeight: '38px', minWidth: '38px', minHeight: '38px'}}
+            >
+                +
+            </Button>
+
+
             {error && <div className="error-message">{error}</div>}
         </div>
     );

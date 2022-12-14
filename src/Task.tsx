@@ -4,7 +4,8 @@ import {EditableSpan} from "./components/EtidTitle";
 import s from './Task.module.css'
 import {changeStatusAC, editTaskAC, removeTaskAC} from "./reducers/tasksReducer";
 import {useDispatch} from "react-redux";
-import {TaskType} from "./TodoList";
+import {TaskType} from "./api/todolistsApi";
+
 
 export type TaskPropsType = {
     task: TaskType
@@ -12,7 +13,6 @@ export type TaskPropsType = {
 }
 
 const Task = React.memo(({task, todoListID}: TaskPropsType) => {
-    console.log('task')
     const dispatch = useDispatch()
 
     const editTaskHandler = (taskID: string, newTitle: string) => {
@@ -24,8 +24,8 @@ const Task = React.memo(({task, todoListID}: TaskPropsType) => {
     }
 
     return (
-        <li className={task.isDone ? "is-done" : ""}>
-            <Checkbox defaultChecked onChange={onChangeHandler} checked={task.isDone}/>
+        <li className={task.status === 1 ? "is-done" : ""}>
+            <Checkbox defaultChecked onChange={onChangeHandler} checked={task.status === 2}/>
             <EditableSpan callBack={(title) => editTaskHandler(task.id, title)} title={task.title}/>
             <button onClick={onClickHandler}>x</button>
         </li>

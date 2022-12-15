@@ -1,13 +1,12 @@
-import React, {ChangeEvent, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import AddItemForm from "./components/AddItemForm";
-import {Button} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import s from './components/AddItemForm.module.css'
 import {changeFilterAC, deleteTodolistsTC, removeTodoListAC, TodolistDomainType} from "./reducers/todoListsReducer";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {AppRootStateType} from "./store/store";
-import {addTaskAC, fetchTasksTC} from "./reducers/tasksReducer";
+import {createTaskTC, fetchTasksTC} from "./reducers/tasksReducer";
 import Task from "./Task";
 import {useAppDispatch} from "./common/common";
 import {TaskType} from "./api/todolistsApi";
@@ -34,7 +33,7 @@ export const TodoList = (props: PropsType) => {
     const onClickDeleteTodoList = () => dispatch(deleteTodolistsTC(props.todoList.id))
 
     const addTaskHandler = (newTitle: string) => {
-        // dispatch(addTaskAC(props.todoList.id, newTitle))
+        dispatch(createTaskTC(props.todoList.id, newTitle))
     }
 
     // if (props.todoList.filter === "active") {
@@ -43,6 +42,7 @@ export const TodoList = (props: PropsType) => {
     // if (props.todoList.filter === "completed") {
     //     // tasks = tasks.filter(t => t.isDone === true);
     // }
+    console.log (tasks)
     return <div>
         <div className={s.title__delete}>
             <h3>{props.title}</h3>

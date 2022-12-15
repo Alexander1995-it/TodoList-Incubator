@@ -1,22 +1,21 @@
 import React, {useEffect} from 'react';
 import './App.css';
 import {TodoList} from './TodoList';
-import {v1} from 'uuid';
 import AddItemForm from "./components/AddItemForm";
-import {addTasksTodoListAC} from "./reducers/tasksReducer";
+import {TasksStateType} from "./reducers/tasksReducer";
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {addTodoListAC, createTodolistTC, fetchTodolistsTC, TodolistDomainType} from "./reducers/todoListsReducer";
-import {useDispatch, useSelector} from "react-redux";
+import {createTodolistTC, fetchTodolistsTC, TodolistDomainType} from "./reducers/todoListsReducer";
+import {useSelector} from "react-redux";
 import {AppRootStateType} from "./store/store";
 import {useAppDispatch} from "./common/common";
-import {TaskType} from "./api/todolistsApi";
 
-export type TasksReducerType = { [key: string]: Array<TaskType> }
+
 
 const App = () =>  {
 
     let todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todoLists)
+    let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useAppDispatch()
 
     useEffect(() => {

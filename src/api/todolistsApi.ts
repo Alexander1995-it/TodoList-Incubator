@@ -26,7 +26,7 @@ export const tasksAPI = {
         return incstanse.get (`todo-lists/${todolistId}/tasks`)
     },
     addTask (todolistId: string, title: string) {
-        return incstanse.post<{title: string}, AxiosResponse<ResponseType<TaskType>>>(`todo-lists/${todolistId}/tasks`)
+        return incstanse.post<{title: string}, AxiosResponse<ResponseType<{item: TaskType}>>>(`todo-lists/${todolistId}/tasks`,{title})
     }
 }
 

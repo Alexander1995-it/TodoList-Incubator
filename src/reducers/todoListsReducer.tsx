@@ -14,6 +14,9 @@ export const TodoListsReducer = (state: Array<TodolistDomainType> = initialState
         case 'REMOVE_TODOLIST': {
             return state.filter(el => el.id !== action.todolistID)
         }
+        case 'CHANGE_FILTER': {
+            return state.map(t => t.id === action.payload.todoListID ? {...t, filter: action.payload.value} : t)
+        }
 
         default:
             return state
@@ -24,7 +27,7 @@ export type TodoListsActionType =
     | ReturnType<typeof setTodolistsAC>
     | ReturnType<typeof removeTodoListAC>
     | ReturnType<typeof addTodoListAC>
-// | ReturnType<typeof changeFilterAC>
+    | ReturnType<typeof changeFilterAC>
 
 
 // actions
@@ -32,9 +35,9 @@ export const removeTodoListAC = (todolistID: string) => ({type: 'REMOVE_TODOLIST
 export const addTodoListAC = (newTitle: TodolistType) => ({type: 'ADD_TODOLIST', newTitle} as const)
 export const setTodolistsAC = (todolists: Array<TodolistType>) => ({type: 'SET_TODOLISTS', todolists} as const)
 export const changeFilterAC = (todoListID: string, value: FilterValuesType) => ({
-    type: 'CHANGE-FILTER',
-    payload: {todoListID, value} as const
-})
+    type: 'CHANGE_FILTER',
+    payload: {todoListID, value}
+} as const)
 
 //thunks
 export const fetchTodolistsTC = (): AppThunk => async (dispatch) => {

@@ -16,21 +16,28 @@ export const todolistsAPI = {
     deleteTodolists(todoListID: string) {
         return incstanse.delete<ResponseType>(`todo-lists/${todoListID}`)
     },
-    addTodolist (title: string) {
-        return incstanse.post<{title: string}, AxiosResponse<ResponseType<{item: TodolistType}>>> ('todo-lists', {title})
+    addTodolist(title: string) {
+        return incstanse.post<{ title: string }, AxiosResponse<ResponseType<{ item: TodolistType }>>>('todo-lists', {title})
     }
 }
 
 export const tasksAPI = {
     getTasks(todolistId: string) {
-        return incstanse.get (`todo-lists/${todolistId}/tasks`)
+        return incstanse.get(`todo-lists/${todolistId}/tasks`)
     },
-    addTask (todolistId: string, title: string) {
-        return incstanse.post<{title: string}, AxiosResponse<ResponseType<{item: TaskType}>>>(`todo-lists/${todolistId}/tasks`,{title})
+    addTask(todolistId: string, title: string) {
+        return incstanse.post<{ title: string }, AxiosResponse<ResponseType<{ item: TaskType }>>>(`todo-lists/${todolistId}/tasks`, {title})
+    },
+    removeTask(todolistId: string, taskId: string) {
+        return incstanse.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+    },
+    updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+        return incstanse.put<UpdateTaskModelType, AxiosResponse<ResponseType<UpdateTaskModelType>>>(` /todo-lists/${todolistId}/tasks/${taskId}`, model)
     }
 }
 
 
+//enum
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
@@ -38,6 +45,24 @@ export enum TaskStatuses {
     Draft = 3
 }
 
+export enum TaskPriorities {
+    Low = 0,
+    Middle = 1,
+    Hi = 2,
+    Urgently = 3,
+    Later = 4
+}
+
+
+//typesCommon
+export type ResponseType<D = {}> = {
+    resultCode: number
+    messages: Array<string>
+    fieldsErrors: Array<string>
+    data: D
+}
+
+//typesTask
 export type TaskType = {
     description: string
     title: string
@@ -51,14 +76,17 @@ export type TaskType = {
     addedDate: string
 }
 
-export type ResponseType<D = {}> = {
-    resultCode: number
-    messages: Array<string>
-    fieldsErrors: Array<string>
-    data: D
+export type UpdateTaskModelType = {
+    title: string
+    description: string
+    status: TaskStatuses
+    priority: TaskPriorities
+    startDate: string
+    deadline: string
 }
 
 
+//typesTodolist
 export type TodolistType = {
     id: string
     title: string

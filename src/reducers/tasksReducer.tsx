@@ -1,6 +1,6 @@
 import React from 'react';
-import {tasksAPI, TaskType} from "../api/todolistsApi";
-import {AppActionType, AppThunk} from "../store/store";
+import {TaskPriorities, tasksAPI, TaskStatuses, TaskType, UpdateTaskModelType} from "../api/todolistsApi";
+import {AppActionType, AppRootStateType, AppThunk} from "../store/store";
 
 const initialState: TasksStateType = {}
 
@@ -12,10 +12,9 @@ export const TasksReducer = (state: TasksStateType = initialState, action: AppAc
                 ...state, [action.todolistId]: action.tasks
             }
         case 'ADD_TASK': {
-            console.log ('reducer')
             return {
-                [action.payload.todolistId]: [action.payload.task, ...state[action.payload.todolistId]],
-                ...state
+                ...state,
+                [action.payload.todolistId]: [action.payload.task, ...state[action.payload.todolistId]]
             }
         }
         case 'SET_TODOLISTS': {
@@ -36,12 +35,12 @@ export const TasksReducer = (state: TasksStateType = initialState, action: AppAc
             return copyState
         }
 
-        // case 'REMOVE-TASK': {
-        //     return {
-        //         ...state,
-        //         [action.payload.todoListID]: state[action.payload.todoListID].filter(el => el.id !== action.payload.id)
-        //     }
-        // }
+        case 'REMOVE_TASK': {
+            return {
+                ...state,
+                [action.payload.todolistId]: state[action.payload.todolistId].filter(el => el.id !== action.payload.taskId)
+            }
+        }
 
         // case 'CHANGE-STATUS': {
         //     return {
@@ -61,15 +60,7 @@ export const TasksReducer = (state: TasksStateType = initialState, action: AppAc
         //         )
         //     }
         // }
-        // case 'ADD-TASK-TODOLIST': {
-        //     return {
-        //         ...state,
-        //         [action.payload.newTodolistID]: [
-        //             {id: v1(), title: "HTML&CSS", isDone: true},
-        //             {id: v1(), title: "JS", isDone: true},
-        //         ]
-        //     }
-        // }
+
         default:
             return state
     }
@@ -79,10 +70,10 @@ export const TasksReducer = (state: TasksStateType = initialState, action: AppAc
 export type TasksActionType =
     | ReturnType<typeof setTasksAC>
     | ReturnType<typeof addTaskAC>
-// type RemoveTasksACType = ReturnType<typeof removeTaskAC>
-// type ChangeStatusType = ReturnType<typeof changeStatusAC>
+    | ReturnType<typeof removeTaskAC>
+    | ReturnType<typeof changeStatusAC>
 // type EditTaskType = ReturnType<typeof editTaskAC>
-// type addTasksTodoListType = ReturnType<typeof addTasksTodoListAC>
+
 
 //actions
 export const setTasksAC = (todolistId: string, tasks: TaskType[]) => ({type: 'SET_TASKS', todolistId, tasks} as const)
@@ -91,6 +82,39 @@ export const addTaskAC = (todolistId: string, task: TaskType) => ({
     payload: {todolistId, task}
 } as const)
 
+export const removeTaskAC = (todolistId: string, taskId: string) => {
+    return {
+        type: 'REMOVE_TASK',
+        payload: {
+            todolistId,
+            taskId
+        }
+    } as const
+}
+
+export const changeStatusAC = (todolistId: string, taskId: string, model: UpdateTaskModelType) => {
+    return {
+        type: 'CHANGE-STATUS',
+        payload: {
+            todolistId,
+            taskId,
+            model
+        }
+    } as const
+}
+
+// export const editTaskAC = (todolistID: string, taskID: string, newTitle: string) => {
+//     return {
+//         type: 'EDIT-TASK',
+//         payload: {
+//             todolistID,
+//             taskID,
+//             newTitle
+//         }
+//     } as const
+// }
+
+//thunk
 export const fetchTasksTC = (todoListID: string): AppThunk => async (dispatch) => {
     let response = await tasksAPI.getTasks(todoListID)
     dispatch(setTasksAC(todoListID, response.data.items))
@@ -101,48 +125,35 @@ export const createTaskTC = (todolistId: string, title: string): AppThunk => asy
     if (response.data.resultCode === 0) {
         dispatch(addTaskAC(todolistId, task))
     }
-
-}
-export const removeTaskAC = (todoListID: string, id: string) => {
-    return {
-        type: 'REMOVE-TASK',
-        payload: {
-            todoListID,
-            id
-        }
-    } as const
 }
 
-export const changeStatusAC = (todoListID: string, taskId: string, isDone: boolean) => {
-    return {
-        type: 'CHANGE-STATUS',
-        payload: {
-            todoListID,
-            taskId,
-            isDone
-        }
-    } as const
-}
-export const editTaskAC = (todolistID: string, taskID: string, newTitle: string) => {
-    return {
-        type: 'EDIT-TASK',
-        payload: {
-            todolistID,
-            taskID,
-            newTitle
-        }
-    } as const
-}
-export const addTasksTodoListAC = (newTodolistID: string) => {
-    return {
-        type: 'ADD-TASK-TODOLIST',
-        payload: {
-            newTodolistID
-        }
-    } as const
+export const removeTaskTC = (todolistId: string, taskId: string): AppThunk => async (dispatch) => {
+    const response = await tasksAPI.removeTask(todolistId, taskId)
+    if (response.data.resultCode === 0) {
+        dispatch(removeTaskAC(todolistId, taskId))
+    }
 }
 
+export const updateStatusTC = (todolistId: string, taskId: string, status: TaskStatuses): AppThunk => async (dispatch, getState: () => AppRootStateType) => {
+    const task = getState().tasks[todolistId].find(t => t.id === taskId)
+    if (task) {
+        const model: UpdateTaskModelType = {
+            title: task.title,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline,
+            status
+        }
+        const response = await tasksAPI.updateTask(todolistId, taskId, model)
+        if (response.data.resultCode === 0) {
+            dispatch(changeStatusAC(todolistId, taskId, model))
+        }
+    }
 
+}
+
+// types
 export type TasksStateType = {
     [key: string]: Array<TaskType>
 }

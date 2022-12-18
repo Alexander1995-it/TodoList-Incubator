@@ -4,12 +4,11 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import s from './components/AddItemForm.module.css'
 import {changeFilterAC, deleteTodolistsTC, removeTodoListAC, TodolistDomainType} from "./reducers/todoListsReducer";
-import {useSelector} from "react-redux";
-import {AppRootStateType} from "./store/store";
-import {createTaskTC, fetchTasksTC} from "./reducers/tasksReducer";
+import {createTaskTC, fetchTasksTC, TasksStateType} from "./reducers/tasksReducer";
 import Task from "./Task";
-import {useAppDispatch} from "./common/common";
-import {TaskType} from "./api/todolistsApi";
+import {useAppDispatch, useAppSelector} from "./common/hooks";
+import {TaskStatuses, TaskType} from "./api/todolistsApi";
+import {Button} from "@mui/material";
 
 
 type PropsType = {
@@ -18,31 +17,31 @@ type PropsType = {
 }
 
 export const TodoList = (props: PropsType) => {
+
     let dispatch = useAppDispatch()
 
     useEffect(() => {
         dispatch(fetchTasksTC(props.todoList.id))
     }, [])
+    let tasks = useAppSelector <TaskType[]>(state => state.tasks[props.todoList.id])
 
-    let tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[props.todoList.id])
+//handlerFilter
+    const onAllClickHandler = () => dispatch(changeFilterAC(props.todoList.id, "all"));
+    const onActiveClickHandler = () => dispatch(changeFilterAC(props.todoList.id, "active"));
+    const onCompletedClickHandler = () => dispatch(changeFilterAC(props.todoList.id, "completed"));
 
-
-    // const onAllClickHandler = () => dispatch(changeFilterAC(props.todoList.id, "all"));
-    // const onActiveClickHandler = () => dispatch(changeFilterAC(props.todoList.id, "active"));
-    // const onCompletedClickHandler = () => dispatch(changeFilterAC(props.todoList.id, "completed"));
     const onClickDeleteTodoList = () => dispatch(deleteTodolistsTC(props.todoList.id))
 
     const addTaskHandler = (newTitle: string) => {
         dispatch(createTaskTC(props.todoList.id, newTitle))
     }
 
-    // if (props.todoList.filter === "active") {
-    //     // tasks = tasks.filter(t => t.isDone === false);
-    // }
-    // if (props.todoList.filter === "completed") {
-    //     // tasks = tasks.filter(t => t.isDone === true);
-    // }
-    console.log (tasks)
+    if (props.todoList.filter === "active") {
+        tasks = tasks.filter(t => t.status === TaskStatuses.New);
+    }
+    if (props.todoList.filter === "completed") {
+        tasks = tasks.filter(t => t.status === TaskStatuses.Completed);
+    }
     return <div>
         <div className={s.title__delete}>
             <h3>{props.title}</h3>
@@ -57,17 +56,17 @@ export const TodoList = (props: PropsType) => {
         </div>
         <ul>
             {
-              tasks.map(t => <Task key={t.id} task={t} todoListID={props.todoList.id}/>)
+                tasks.map(t => <Task key={t.id} task={t} todolistId={props.todoList.id}/>)
             }
         </ul>
         <div>
 
-            {/*<Button variant={props.todoList.filter === 'all' ? "contained" : "text"} color="success"*/}
-            {/*        onClick={onAllClickHandler}>All</Button>*/}
-            {/*<Button variant={props.todoList.filter === 'active' ? "contained" : "text"} color="secondary"*/}
-            {/*        onClick={onActiveClickHandler}>Active</Button>*/}
-            {/*<Button variant={props.todoList.filter === 'completed' ? "contained" : "text"} color="error"*/}
-            {/*        onClick={onCompletedClickHandler}>Completed</Button>*/}
+            <Button variant={props.todoList.filter === 'all' ? "contained" : "text"} color="success"
+                    onClick={onAllClickHandler}>All</Button>
+            <Button variant={props.todoList.filter === 'active' ? "contained" : "text"} color="secondary"
+                    onClick={onActiveClickHandler}>Active</Button>
+            <Button variant={props.todoList.filter === 'completed' ? "contained" : "text"} color="error"
+                    onClick={onCompletedClickHandler}>Completed</Button>
 
         </div>
     </div>

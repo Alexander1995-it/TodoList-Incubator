@@ -1,5 +1,5 @@
 import React from 'react';
-import {TaskPriorities, tasksAPI, TaskStatuses, TaskType, UpdateTaskModelType} from "../api/todolistsApi";
+import {tasksAPI, TaskStatuses, TaskType, UpdateTaskModelType} from "../api/todolistsApi";
 import {AppActionType, AppRootStateType, AppThunk} from "../store/store";
 
 const initialState: TasksStateType = {}
@@ -42,15 +42,15 @@ export const TasksReducer = (state: TasksStateType = initialState, action: AppAc
             }
         }
 
-        // case 'CHANGE-STATUS': {
-        //     return {
-        //         ...state,
-        //         [action.payload.todoListID]: state[action.payload.todoListID].map(el => el.id === action.payload.taskId
-        //             ? {...el, isDone: action.payload.isDone}
-        //             : el)
-        //
-        //     }
-        // }
+        case 'CHANGE_STATUS': {
+            return {
+                ...state,
+                [action.payload.todolistId]: state[action.payload.todolistId].map(el => el.id === action.payload.taskId
+                    ? {...el, ...action.payload.model}
+                    : el)
+
+            }
+        }
         // case 'EDIT-TASK': {
         //     return {
         //         ...state,
@@ -94,7 +94,7 @@ export const removeTaskAC = (todolistId: string, taskId: string) => {
 
 export const changeStatusAC = (todolistId: string, taskId: string, model: UpdateTaskModelType) => {
     return {
-        type: 'CHANGE-STATUS',
+        type: 'CHANGE_STATUS',
         payload: {
             todolistId,
             taskId,

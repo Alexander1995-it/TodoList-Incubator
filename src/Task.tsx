@@ -1,9 +1,9 @@
-import React, {ChangeEvent, useCallback} from 'react';
+import React, {ChangeEvent} from 'react';
 import {Checkbox} from "@mui/material";
 import {EditableSpan} from "./components/EtidTitle";
 import s from './Task.module.css'
-import {changeStatusAC, editTaskAC, removeTaskAC, removeTaskTC} from "./reducers/tasksReducer";
-import {TaskType} from "./api/todolistsApi";
+import {removeTaskTC, updateStatusTC} from "./reducers/tasksReducer";
+import {TaskStatuses, TaskType} from "./api/todolistsApi";
 import {useAppDispatch} from "./common/hooks";
 
 
@@ -20,7 +20,8 @@ const Task = React.memo(({task, todolistId}: TaskPropsType) => {
     }
     const onHandlerDelete = () => dispatch(removeTaskTC(todolistId, task.id))
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        // dispatch(changeStatusAC(todoListID, task.id, e.currentTarget.checked))
+        let newIsDoneValue = e.currentTarget.checked
+        dispatch(updateStatusTC(todolistId, task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New))
     }
 
     return (

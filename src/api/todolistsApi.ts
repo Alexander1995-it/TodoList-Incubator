@@ -32,7 +32,7 @@ export const tasksAPI = {
         return incstanse.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-        return incstanse.put<UpdateTaskModelType, AxiosResponse<ResponseType<UpdateTaskModelType>>>(` /todo-lists/${todolistId}/tasks/${taskId}`, model)
+        return incstanse.put<UpdateTaskModelType, AxiosResponse<ResponseType<{item: TaskType}>>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
     }
 }
 

@@ -3,8 +3,8 @@ import AddItemForm from "./components/AddItemForm";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import s from './components/AddItemForm.module.css'
-import {changeFilterAC, deleteTodolistsTC, removeTodoListAC, TodolistDomainType} from "./reducers/todoListsReducer";
-import {createTaskTC, fetchTasksTC, TasksStateType} from "./reducers/tasksReducer";
+import {changeFilterAC, deleteTodolistsTC, TodolistDomainType} from "./reducers/todoListsReducer";
+import {createTaskTC, fetchTasksTC} from "./reducers/tasksReducer";
 import Task from "./Task";
 import {useAppDispatch, useAppSelector} from "./common/hooks";
 import {TaskStatuses, TaskType} from "./api/todolistsApi";
@@ -23,7 +23,7 @@ export const TodoList = (props: PropsType) => {
     useEffect(() => {
         dispatch(fetchTasksTC(props.todoList.id))
     }, [])
-    let tasks = useAppSelector <TaskType[]>(state => state.tasks[props.todoList.id])
+    let tasks = useAppSelector<TaskType[]>(state => state.tasks[props.todoList.id])
 
 //handlerFilter
     const onAllClickHandler = () => dispatch(changeFilterAC(props.todoList.id, "all"));

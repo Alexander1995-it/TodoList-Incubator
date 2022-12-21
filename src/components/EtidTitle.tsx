@@ -30,6 +30,6 @@ export const EditableSpan = (props: EtidTitlePropsType) => {
         edit
         ? <input value={newTitle} onChange={onChangeHandler} onBlur={editHandler} autoFocus/>
         : <span onDoubleClick={editHandler}>{props.title}</span>
-    );
-};
+    )
+}
 

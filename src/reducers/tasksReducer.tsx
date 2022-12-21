@@ -48,23 +48,12 @@ export const TasksReducer = (state: TasksStateType = initialState, action: AppAc
                 [action.payload.todolistId]: state[action.payload.todolistId].map(el => el.id === action.payload.taskId
                     ? {...el, ...action.payload.model}
                     : el)
-
             }
         }
-        // case 'EDIT-TASK': {
-        //     return {
-        //         ...state,
-        //         [action.payload.todolistID]: state[action.payload.todolistID].map(el => el.id === action.payload.taskID
-        //             ? {...el, title: action.payload.newTitle}
-        //             : el
-        //         )
-        //     }
-        // }
 
         default:
             return state
     }
-
 };
 
 export type TasksActionType =
@@ -72,8 +61,6 @@ export type TasksActionType =
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof removeTaskAC>
     | ReturnType<typeof changeStatusAC>
-// type EditTaskType = ReturnType<typeof editTaskAC>
-
 
 //actions
 export const setTasksAC = (todolistId: string, tasks: TaskType[]) => ({type: 'SET_TASKS', todolistId, tasks} as const)
@@ -102,17 +89,6 @@ export const changeStatusAC = (todolistId: string, taskId: string, model: Update
         }
     } as const
 }
-
-// export const editTaskAC = (todolistID: string, taskID: string, newTitle: string) => {
-//     return {
-//         type: 'EDIT-TASK',
-//         payload: {
-//             todolistID,
-//             taskID,
-//             newTitle
-//         }
-//     } as const
-// }
 
 //thunk
 export const fetchTasksTC = (todoListID: string): AppThunk => async (dispatch) => {
@@ -150,8 +126,27 @@ export const updateStatusTC = (todolistId: string, taskId: string, status: TaskS
             dispatch(changeStatusAC(todolistId, taskId, model))
         }
     }
+}
+
+export const updateTitleTC = (todolistId: string, taskId: string, title: string): AppThunk => async (dispatch, getState: () => AppRootStateType) => {
+    const task = getState().tasks[todolistId].find(t => t.id === taskId)
+    if (task) {
+        const model: UpdateTaskModelType = {
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline,
+            status: task.status,
+            title
+        }
+        const response = await tasksAPI.updateTask(todolistId, taskId, model)
+        if (response.data.resultCode === 0) {
+            dispatch(changeStatusAC(todolistId, taskId, model))
+        }
+    }
 
 }
+
 
 // types
 export type TasksStateType = {

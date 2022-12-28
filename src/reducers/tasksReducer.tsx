@@ -1,11 +1,13 @@
 import React from 'react';
 import {tasksAPI, TaskStatuses, TaskType, UpdateTaskModelType} from "../api/todolistsApi";
 import {AppActionType, AppRootStateType, AppThunk} from "../store/store";
+import {setAppError, setAppStatus} from "./appReducer";
+import axios, {AxiosError} from "axios/index";
 
 const initialState: TasksStateType = {}
 
 
-export const TasksReducer = (state: TasksStateType = initialState, action: AppActionType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType = initialState, action: AppActionType): TasksStateType => {
     switch (action.type) {
         case "SET_TASKS":
             return {
@@ -92,22 +94,74 @@ export const changeStatusAC = (todolistId: string, taskId: string, model: Update
 
 //thunk
 export const fetchTasksTC = (todoListID: string): AppThunk => async (dispatch) => {
-    let response = await tasksAPI.getTasks(todoListID)
-    dispatch(setTasksAC(todoListID, response.data.items))
+    try {
+        let response = await tasksAPI.getTasks(todoListID)
+        dispatch(setTasksAC(todoListID, response.data.items))
+    } catch (e) {
+        let err = e as AxiosError | Error
+        if (axios.isAxiosError(err)) {
+            const error = err.response?.data
+                ? (err.response.data as { error: string }).error
+                : err.message
+            dispatch(setAppError(error))
+        }
+    }
+
 }
 export const createTaskTC = (todolistId: string, title: string): AppThunk => async (dispatch) => {
-    const response = await tasksAPI.addTask(todolistId, title)
-    const task = response.data.data.item
-    if (response.data.resultCode === 0) {
-        dispatch(addTaskAC(todolistId, task))
+    dispatch(setAppStatus('loading'))
+    try {
+        const response = await tasksAPI.addTask(todolistId, title)
+        const task = response.data.data.item
+        if (response.data.resultCode === 0) {
+            dispatch(addTaskAC(todolistId, task))
+        } else {
+            if (response.data.messages.length) {
+                dispatch(setAppError(response.data.messages[0]))
+            } else {
+                dispatch(setAppError('Some error'))
+            }
+        }
+    } catch (e) {
+        let err = e as AxiosError | Error
+        if (axios.isAxiosError(err)) {
+            const error = err.response?.data
+                ? (err.response.data as { error: string }).error
+                : err.message
+            dispatch(setAppError(error))
+        }
+
+    } finally {
+        dispatch(setAppStatus('succeeded'))
     }
+
 }
 
 export const removeTaskTC = (todolistId: string, taskId: string): AppThunk => async (dispatch) => {
-    const response = await tasksAPI.removeTask(todolistId, taskId)
-    if (response.data.resultCode === 0) {
-        dispatch(removeTaskAC(todolistId, taskId))
+    dispatch(setAppStatus('loading'))
+    try {
+        const response = await tasksAPI.removeTask(todolistId, taskId)
+        if (response.data.resultCode === 0) {
+            dispatch(removeTaskAC(todolistId, taskId))
+        } else {
+            if (response.data.messages.length) {
+                dispatch(setAppError(response.data.messages[0]))
+            } else {
+                dispatch(setAppError('Some error'))
+            }
+        }
+    } catch (e) {
+        let err = e as AxiosError | Error
+        if (axios.isAxiosError(err)) {
+            const error = err.response?.data
+                ? (err.response.data as { error: string }).error
+                : err.message
+            dispatch(setAppError(error))
+        }
+    } finally {
+        dispatch(setAppStatus('succeeded'))
     }
+
 }
 
 export const updateStatusTC = (todolistId: string, taskId: string, status: TaskStatuses): AppThunk => async (dispatch, getState: () => AppRootStateType) => {
@@ -121,10 +175,30 @@ export const updateStatusTC = (todolistId: string, taskId: string, status: TaskS
             deadline: task.deadline,
             status
         }
-        const response = await tasksAPI.updateTask(todolistId, taskId, model)
-        if (response.data.resultCode === 0) {
-            dispatch(changeStatusAC(todolistId, taskId, model))
+        dispatch(setAppStatus('loading'))
+        try {
+            const response = await tasksAPI.updateTask(todolistId, taskId, model)
+            if (response.data.resultCode === ResponseStatusCode.success) {
+                dispatch(changeStatusAC(todolistId, taskId, model))
+            } else {
+                if (response.data.messages.length) {
+                    dispatch(setAppError(response.data.messages[0]))
+                } else {
+                    dispatch(setAppError('Some error'))
+                }
+            }
+        } catch (e) {
+            let err = e as AxiosError | Error
+            if (axios.isAxiosError(err)) {
+                const error = err.response?.data
+                    ? (err.response.data as { error: string }).error
+                    : err.message
+                dispatch(setAppError(error))
+            }
+        } finally {
+            dispatch(setAppStatus('succeeded'))
         }
+
     }
 }
 
@@ -139,16 +213,40 @@ export const updateTitleTC = (todolistId: string, taskId: string, title: string)
             status: task.status,
             title
         }
-        const response = await tasksAPI.updateTask(todolistId, taskId, model)
-        if (response.data.resultCode === 0) {
-            dispatch(changeStatusAC(todolistId, taskId, model))
+        dispatch(setAppStatus('loading'))
+        try {
+            const response = await tasksAPI.updateTask(todolistId, taskId, model)
+            if (response.data.resultCode === ResponseStatusCode.success) {
+                dispatch(changeStatusAC(todolistId, taskId, model))
+            } else {
+                if (response.data.messages.length) {
+                    dispatch(setAppError(response.data.messages[0]))
+                } else {
+                    dispatch(setAppError('Some error'))
+                }
+            }
+        } catch (e) {
+            let err = e as AxiosError | Error
+            if (axios.isAxiosError(err)) {
+                const error = err.response?.data
+                    ? (err.response.data as { error: string }).error
+                    : err.message
+                dispatch(setAppError(error))
+            }
+        } finally {
+            dispatch(setAppStatus('succeeded'))
         }
     }
-
 }
-
 
 // types
 export type TasksStateType = {
     [key: string]: Array<TaskType>
+}
+
+// enum
+enum ResponseStatusCode {
+    success = 0,
+    error = 1,
+    captcha = 10
 }

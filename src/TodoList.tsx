@@ -47,12 +47,13 @@ export const TodoList = (props: PropsType) => {
             <h3>{props.title}</h3>
             <IconButton
                 onClick={onClickDeleteTodoList}
+                disabled={props.todoList.entityStatus === 'loading'}
                 aria-label="delete">
                 <DeleteIcon/>
             </IconButton>
         </div>
         <div>
-            <AddItemForm callBack={addTaskHandler}/>
+            <AddItemForm disabled={props.todoList.entityStatus === 'loading'} callBack={addTaskHandler}/>
         </div>
         <ul>
             {

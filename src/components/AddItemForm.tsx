@@ -3,6 +3,7 @@ import {Button, TextField} from "@mui/material";
 
 type AddItemFormPropsType = {
     callBack: (title: string) => void
+    disabled?: boolean
 
 }
 
@@ -49,6 +50,7 @@ const AddItemForm = (props: AddItemFormPropsType) => {
                 variant="outlined" />
             <Button
                 onClick={onClickHandler}
+                disabled={props.disabled}
                 variant="contained"
                 style={{maxWidth: '38px', maxHeight: '38px', minWidth: '38px', minHeight: '38px'}}
             >

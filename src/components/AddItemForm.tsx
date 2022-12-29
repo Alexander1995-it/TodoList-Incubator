@@ -4,6 +4,7 @@ import {Button, TextField} from "@mui/material";
 type AddItemFormPropsType = {
     callBack: (title: string) => void
     disabled?: boolean
+    label?: string
 
 }
 
@@ -46,8 +47,8 @@ const AddItemForm = (props: AddItemFormPropsType) => {
                 onChange={onChangeHandler}
                 value={title}
                 id="outlined-basic"
-                label="Outlined"
-                variant="outlined" />
+                label={props.label ? props.label : 'Outlined'}
+                variant='outlined'/>
             <Button
                 onClick={onClickHandler}
                 disabled={props.disabled}

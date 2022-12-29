@@ -42,7 +42,7 @@ export const TodoList = (props: PropsType) => {
     if (props.todoList.filter === "completed") {
         tasks = tasks.filter(t => t.status === TaskStatuses.Completed);
     }
-    return <div>
+    return <div className={s.todoListBlock}>
         <div className={s.title__delete}>
             <h3>{props.title}</h3>
             <IconButton
@@ -53,7 +53,7 @@ export const TodoList = (props: PropsType) => {
             </IconButton>
         </div>
         <div>
-            <AddItemForm disabled={props.todoList.entityStatus === 'loading'} callBack={addTaskHandler}/>
+            <AddItemForm label='Add task' disabled={props.todoList.entityStatus === 'loading'} callBack={addTaskHandler}/>
         </div>
         <ul>
             {

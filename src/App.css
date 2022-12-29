@@ -1,11 +1,10 @@
 .App {
-  padding: 30px;
-}
 
-.App > div {
-  margin-right: 50px;
 }
+.mainBlock {
+  margin: 20px 15px 0 15px;
 
+}
 .error {
   border: red 1px solid;
 }

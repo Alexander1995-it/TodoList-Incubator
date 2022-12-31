@@ -1,10 +1,10 @@
 import React, {ChangeEvent} from 'react';
 import {Checkbox} from "@mui/material";
-import {EditableSpan} from "./components/EtidTitle";
+import {EditableSpan} from "../../common/EtidTitle/EtidTitle";
 import s from './Task.module.css'
-import {removeTaskTC, updateStatusTC, updateTitleTC} from "./reducers/tasksReducer";
-import {TaskStatuses, TaskType} from "./api/todolistsApi";
-import {useAppDispatch} from "./common/hooks";
+import {removeTaskTC, updateStatusTC, updateTitleTC} from "../../reducers/tasksReducer";
+import {TaskStatuses, TaskType} from "../../api/todolistsApi";
+import {useAppDispatch} from "../../common/hooks/hooks";
 
 
 export type TaskPropsType = {

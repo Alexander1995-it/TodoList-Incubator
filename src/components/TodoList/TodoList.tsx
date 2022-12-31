@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
-import AddItemForm from "./components/AddItemForm";
+import AddItemForm from "../../common/AddItemForm/AddItemForm";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import s from './components/AddItemForm.module.css'
-import {changeFilterAC, deleteTodolistsTC, TodolistDomainType} from "./reducers/todoListsReducer";
-import {createTaskTC, fetchTasksTC} from "./reducers/tasksReducer";
-import Task from "./Task";
-import {useAppDispatch, useAppSelector} from "./common/hooks";
-import {TaskStatuses, TaskType} from "./api/todolistsApi";
+import s from '../../components/TodoList/TodoList.module.css'
+import {changeFilterAC, deleteTodolistsTC, TodolistDomainType} from "../../reducers/todoListsReducer";
+import {createTaskTC, fetchTasksTC} from "../../reducers/tasksReducer";
+import Task from "../Task/Task";
+import {useAppDispatch, useAppSelector} from "../../common/hooks/hooks";
+import {TaskStatuses, TaskType} from "../../api/todolistsApi";
 import {Button} from "@mui/material";
 
 

@@ -58,6 +58,11 @@ export const tasksReducer = (state: TasksStateType = initialState, action: AppAc
     }
 };
 
+// types
+export type TasksStateType = {
+    [key: string]: Array<TaskType>
+}
+
 export type TasksActionType =
     | ReturnType<typeof setTasksAC>
     | ReturnType<typeof addTaskAC>
@@ -239,10 +244,6 @@ export const updateTitleTC = (todolistId: string, taskId: string, title: string)
     }
 }
 
-// types
-export type TasksStateType = {
-    [key: string]: Array<TaskType>
-}
 
 // enum
 enum ResponseStatusCode {

@@ -32,10 +32,15 @@ export const tasksAPI = {
         return incstanse.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-        return incstanse.put<UpdateTaskModelType, AxiosResponse<ResponseType<{item: TaskType}>>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
+        return incstanse.put<UpdateTaskModelType, AxiosResponse<ResponseType<{ item: TaskType }>>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
     }
 }
 
+export const authApi = {
+    authMe() {
+        return incstanse.get<ResponseType<AuthMeResponse>>('auth/me')
+    }
+}
 
 //enum
 export enum TaskStatuses {
@@ -92,6 +97,13 @@ export type TodolistType = {
     title: string
     addedDate: string
     order: number
+}
+
+//typesAuth
+export type AuthMeResponse = {
+    email: string
+    id: number
+    login: string
 }
 
 

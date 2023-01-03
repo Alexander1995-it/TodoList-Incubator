@@ -27,13 +27,13 @@ const setAuthMe = (data: AuthMeResponse, isAuth: boolean) => ({type: 'SET_AUTH_M
 
 //thunk
 export const AuthMeTC = (): AppThunk => async (dispatch) => {
-   try {
-      let response = await authApi.authMe()
-       if (response.data.resultCode === 0) {
-           dispatch(setAuthMe(response.data.data, true))
-       }
+    try {
+        let response = await authApi.authMe()
+        if (response.data.resultCode === 0) {
+            dispatch(setAuthMe(response.data.data, true))
+        }
 
-   } catch (e) {
+    } catch (e) {
 
-   }
+    }
 }

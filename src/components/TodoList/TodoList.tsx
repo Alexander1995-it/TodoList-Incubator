@@ -53,7 +53,8 @@ export const TodoList = (props: PropsType) => {
             </IconButton>
         </div>
         <div>
-            <AddItemForm label='Add task' disabled={props.todoList.entityStatus === 'loading'} callBack={addTaskHandler}/>
+            <AddItemForm label='Add task' disabled={props.todoList.entityStatus === 'loading'}
+                         callBack={addTaskHandler}/>
         </div>
         <ul>
             {

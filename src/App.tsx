@@ -1,16 +1,13 @@
 import React, {useEffect} from 'react';
 import './App.css';
-import {TodoList} from './components/TodoList/TodoList';
-import AddItemForm from "./common/AddItemForm/AddItemForm";
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import {createTodolistTC, fetchTodolistsTC, TodolistDomainType} from "./reducers/todoListsReducer";
 import {useAppDispatch, useAppSelector} from "./common/hooks/hooks";
 import LinearProgress from '@mui/material/LinearProgress';
 import {RequestStatusType} from "./reducers/appReducer";
 import CustomizedSnackbars from "./common/ErrorSnacbar/ErrorSnacbar";
 import Header from "./components/Header/Header";
 import TodoLists from "./components/TodoLists/TodoLists";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {LoginPage} from "./components/Login/LoginPage";
 
 
 const App = () => {
@@ -26,7 +23,12 @@ const App = () => {
                 {status === 'loading' && <LinearProgress/>}
             </div>
             <CustomizedSnackbars/>
-            <TodoLists/>
+            <Routes>
+                <Route path='/' element={<TodoLists/>}></Route>
+                <Route path='/login' element={<LoginPage/>}></Route>
+                <Route path='/404' element={<div>404: page not found</div>}></Route>
+                <Route path='/*' element={<Navigate to='/404'/>}/>
+            </Routes>
         </div>
     );
 }

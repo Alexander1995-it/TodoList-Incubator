@@ -1,5 +1,5 @@
 import React from 'react';
-import {todolistsAPI, TodolistType} from "../api/todolistsApi";
+import {ResponseResultCode, todolistsAPI, TodolistType} from "../api/todolistsApi";
 import {AppThunk} from "../store/store";
 import axios, {AxiosError} from "axios";
 import {RequestStatusType, setAppError, setAppStatus} from "./appReducer";
@@ -56,10 +56,11 @@ export const fetchTodolistsTC = (): AppThunk => async (dispatch) => {
         let response = await todolistsAPI.getTodolists()
         dispatch(setTodolistsAC(response.data))
     } catch (e) {
+        debugger
         let err = e as AxiosError | Error
         if (axios.isAxiosError(err)) {
             const error = err.response?.data
-                ? (err.response.data as { error: string }).error
+                ? (err.response.data as { message: string }).message
                 : err.message
             dispatch(setAppError(error))
         }
@@ -91,7 +92,7 @@ export const deleteTodolistsTC = (todoListID: string): AppThunk => async (dispat
     dispatch(changeTodolistEntityStatusAC(todoListID, 'loading'))
     try {
         const response = await todolistsAPI.deleteTodolists(todoListID)
-        if (response.data.resultCode === 0) {
+        if (response.data.resultCode === ResponseResultCode.OK) {
             dispatch(removeTodoListAC(todoListID))
         }
     } catch (e) {

@@ -1,21 +1,16 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {AuthMeTC} from "../../reducers/loginReducer";
-import {useAppDispatch, useAppSelector} from "../../common/hooks/hooks";
+import {useAppSelector} from "../../common/hooks/hooks";
+import {NavLink} from "react-router-dom";
 
 const Header = () => {
 
-    const dispatch = useAppDispatch()
-    const login = useAppSelector(state => state.login)
 
-    useEffect(() => {
-        dispatch(AuthMeTC())
-    }, [])
-
+    const login = useAppSelector(state => state.auth)
 
     return (
         <div>
@@ -25,7 +20,9 @@ const Header = () => {
                         <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                             TodoList
                         </Typography>
-                        {login.isAuth ? login.login : <Button color="inherit">Login</Button>}
+                        {login.isLoggedIn
+                            ? <NavLink to='login'><Button color="inherit">Logout</Button></NavLink>
+                            : <NavLink to='login'><Button color="inherit">Login</Button></NavLink>}
                     </Toolbar>
                 </AppBar>
             </Box>

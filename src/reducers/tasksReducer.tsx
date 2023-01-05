@@ -3,6 +3,7 @@ import {tasksAPI, TaskStatuses, TaskType, UpdateTaskModelType} from "../api/todo
 import {AppActionType, AppRootStateType, AppThunk} from "../store/store";
 import {setAppError, setAppStatus} from "./appReducer";
 import axios, {AxiosError} from "axios/index";
+import {handlerServerAppError} from "../common/utils/errorUtils";
 
 const initialState: TasksStateType = {}
 
@@ -121,11 +122,7 @@ export const createTaskTC = (todolistId: string, title: string): AppThunk => asy
         if (response.data.resultCode === 0) {
             dispatch(addTaskAC(todolistId, task))
         } else {
-            if (response.data.messages.length) {
-                dispatch(setAppError(response.data.messages[0]))
-            } else {
-                dispatch(setAppError('Some error'))
-            }
+            handlerServerAppError(dispatch, response.data)
         }
     } catch (e) {
         let err = e as AxiosError | Error

@@ -39,6 +39,9 @@ export const tasksAPI = {
 export const authApi = {
     authMe() {
         return incstanse.get<ResponseType<AuthMeResponse>>('auth/me')
+    },
+    login(data: LoginRequestType) {
+        return incstanse.post<LoginRequestType, AxiosResponse<ResponseType<{userId: number}>>>('auth/login', data)
     }
 }
 
@@ -56,6 +59,11 @@ export enum TaskPriorities {
     Hi = 2,
     Urgently = 3,
     Later = 4
+}
+
+export enum ResponseResultCode {
+    OK = 0,
+    ERROR = 1
 }
 
 
@@ -104,6 +112,13 @@ export type AuthMeResponse = {
     email: string
     id: number
     login: string
+}
+
+export type LoginRequestType = {
+    email: string
+    password: string
+    rememberMe: boolean
+    captcha?: boolean
 }
 
 

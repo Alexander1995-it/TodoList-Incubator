@@ -8,6 +8,7 @@ import Header from "./components/Header/Header";
 import TodoLists from "./components/TodoLists/TodoLists";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {LoginPage} from "./components/Login/LoginPage";
+import {AuthMeTC} from "./reducers/authReducer";
 
 
 const App = () => {
@@ -15,6 +16,10 @@ const App = () => {
     let status = useAppSelector<RequestStatusType>(state => state.app.status)
 
     const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(AuthMeTC())
+    }, [])
 
     return (
         <div className="App">

@@ -9,17 +9,25 @@ import TodoLists from "./components/TodoLists/TodoLists";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {LoginPage} from "./components/Login/LoginPage";
 import {AuthMeTC} from "./reducers/authReducer";
-
+import {CircularProgress} from "@mui/material";
 
 const App = () => {
 
-    let status = useAppSelector<RequestStatusType>(state => state.app.status)
+    const status = useAppSelector<RequestStatusType>(state => state.app.status)
+    const isInitialized = useAppSelector(state => state.app.isInitialized)
+
 
     const dispatch = useAppDispatch()
 
     useEffect(() => {
         dispatch(AuthMeTC())
     }, [])
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
 
     return (
         <div className="App">

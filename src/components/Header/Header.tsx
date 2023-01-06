@@ -4,13 +4,18 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {useAppSelector} from "../../common/hooks/hooks";
+import {useAppDispatch, useAppSelector} from "../../common/hooks/hooks";
 import {NavLink} from "react-router-dom";
+import {logoutTC} from "../../reducers/authReducer";
 
 const Header = () => {
 
-
+    const dispatch = useAppDispatch()
     const login = useAppSelector(state => state.auth)
+
+    const logOutHandler = () => {
+        dispatch(logoutTC())
+    }
 
     return (
         <div>
@@ -20,9 +25,7 @@ const Header = () => {
                         <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                             TodoList
                         </Typography>
-                        {login.isLoggedIn
-                            ? <NavLink to='login'><Button color="inherit">Logout</Button></NavLink>
-                            : <NavLink to='login'><Button color="inherit">Login</Button></NavLink>}
+                        {login.isLoggedIn && <Button onClick={logOutHandler} color="inherit">Logout</Button>}
                     </Toolbar>
                 </AppBar>
             </Box>

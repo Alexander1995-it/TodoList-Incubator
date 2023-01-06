@@ -42,6 +42,8 @@ export const authApi = {
     },
     login(data: LoginRequestType) {
         return incstanse.post<LoginRequestType, AxiosResponse<ResponseType<{userId: number}>>>('auth/login', data)
+    }, logout () {
+        return incstanse.delete<ResponseType>('auth/login')
     }
 }
 

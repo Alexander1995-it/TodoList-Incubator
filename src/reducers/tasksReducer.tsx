@@ -98,7 +98,7 @@ export const changeStatusAC = (todolistId: string, taskId: string, model: Update
     } as const
 }
 
-//thunk
+//thunks
 export const fetchTasksTC = (todoListID: string): AppThunk => async (dispatch) => {
     try {
         let response = await tasksAPI.getTasks(todoListID)

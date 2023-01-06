@@ -41,7 +41,6 @@ const TodoLists = () => {
                             />
                         </Paper>
                     </Grid>
-
                 })}
             </Grid>
         </div>

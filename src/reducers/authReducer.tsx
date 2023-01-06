@@ -1,7 +1,7 @@
 import {authApi, AuthMeResponse, LoginRequestType, ResponseResultCode} from "../api/todolistsApi";
 import {AppThunk} from "../store/store";
 import axios, {AxiosError} from "axios/index";
-import {setAppError, setAppStatus} from "./appReducer";
+import {setAppError, setAppStatus, setInitializedStatusAC} from "./appReducer";
 import {handlerServerAppError} from "../common/utils/errorUtils";
 
 const initialState = {
@@ -30,7 +30,7 @@ export type LoginActionType = ReturnType<typeof setAuthMeAC> | ReturnType<typeof
 
 //action
 const setAuthMeAC = (data: AuthMeResponse, isLoggedIn: boolean) => ({type: 'SET_AUTH_ME', data, isLoggedIn} as const)
-const setLoggedInAC = (isLoggedIn: boolean) => ({type: 'IS_LOGGED_IN', isLoggedIn} as const)
+export const setLoggedInAC = (isLoggedIn: boolean) => ({type: 'IS_LOGGED_IN', isLoggedIn} as const)
 
 //thunk
 export const AuthMeTC = (): AppThunk => async (dispatch) => {
@@ -51,6 +51,8 @@ export const AuthMeTC = (): AppThunk => async (dispatch) => {
                 : err.message
             dispatch(setAppError(error))
         }
+    } finally {
+        dispatch(setInitializedStatusAC(true))
     }
 }
 
@@ -72,6 +74,29 @@ export const LoginTC = (data: LoginRequestType): AppThunk => async (dispatch) =>
             dispatch(setAppError(error))
         }
     } finally {
-        dispatch(setAppStatus('idle'))
+        dispatch(setAppStatus('succeeded'))
     }
+}
+
+export const logoutTC = (): AppThunk => async (dispatch) => {
+    dispatch(setAppStatus('loading'))
+    try {
+        let response = await authApi.logout()
+        if (response.data.resultCode === 0) {
+            dispatch(setLoggedInAC(false))
+        } else {
+            handlerServerAppError(dispatch, response.data)
+        }
+    } catch (e) {
+        let err = e as AxiosError | Error
+        if (axios.isAxiosError(err)) {
+            const error = err.response?.data
+                ? (err.response.data as { error: string }).error
+                : err.message
+            dispatch(setAppError(error))
+        }
+    } finally {
+        dispatch(setAppStatus('succeeded'))
+    }
+
 }

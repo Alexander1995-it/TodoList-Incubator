@@ -9,10 +9,12 @@ const initialState: Array<TodolistDomainType> = []
 
 export const todoListsReducer = (state: Array<TodolistDomainType> = initialState, action: TodoListsActionType): Array<TodolistDomainType> => {
     switch (action.type) {
-        case 'SET_TODOLISTS':
+        case 'SET_TODOLISTS': {
             return action.todolists.map(t => ({...t, filter: 'all', entityStatus: 'idle'}))
-        case 'ADD_TODOLIST':
+        }
+        case 'ADD_TODOLIST': {
             return [{...action.newTitle, filter: 'all', entityStatus: 'idle'}, ...state]
+        }
         case 'REMOVE_TODOLIST': {
             return state.filter(el => el.id !== action.todolistID)
         }
@@ -56,7 +58,6 @@ export const fetchTodolistsTC = (): AppThunk => async (dispatch) => {
         let response = await todolistsAPI.getTodolists()
         dispatch(setTodolistsAC(response.data))
     } catch (e) {
-        debugger
         let err = e as AxiosError | Error
         if (axios.isAxiosError(err)) {
             const error = err.response?.data

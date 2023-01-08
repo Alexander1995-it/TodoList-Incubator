@@ -37,8 +37,8 @@ export const AuthMeTC = (): AppThunk => async (dispatch) => {
     try {
         let response = await authApi.authMe()
         if (response.data.resultCode === ResponseResultCode.OK) {
-            dispatch(setLoggedInAC(true))
-            // dispatch(setAuthMeAC(response.data.data, true))
+            // dispatch(setLoggedInAC(true))
+            dispatch(setAuthMeAC(response.data.data, true))
         } else {
             handlerServerAppError(dispatch, response.data)
         }

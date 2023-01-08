@@ -3,10 +3,10 @@ import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import {useAppDispatch, useAppSelector} from "../../common/hooks/hooks";
-import {NavLink} from "react-router-dom";
 import {logoutTC} from "../../reducers/authReducer";
+import style from './Header.module.css'
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const Header = () => {
 
@@ -25,7 +25,12 @@ const Header = () => {
                         <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                             TodoList
                         </Typography>
-                        {login.isLoggedIn && <Button onClick={logOutHandler} color="inherit">Logout</Button>}
+                        {login.isLoggedIn &&
+                            <div className={style.loginBlock}>
+                                <div className={style.loginText}>{login.login}</div>
+                                <div className={style.loginIcon}><LogoutIcon onClick={logOutHandler}/></div>
+                            </div>
+                        }
                     </Toolbar>
                 </AppBar>
             </Box>

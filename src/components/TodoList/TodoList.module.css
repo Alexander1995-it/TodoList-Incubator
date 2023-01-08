@@ -5,3 +5,8 @@
 .title__delete {
     display: flex;
 }
+
+.listTodo {
+    max-height: 300px;
+    overflow: auto;
+}

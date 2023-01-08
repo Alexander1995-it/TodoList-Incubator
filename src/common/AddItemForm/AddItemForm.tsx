@@ -11,38 +11,20 @@ type AddItemFormPropsType = {
 const AddItemForm = (props: AddItemFormPropsType) => {
 
     const {callBack} = props
-    let [title, setTitle] = useState("")
-    let [error, setError] = useState<string | null>(null)
-
-    // const addTask = () => {
-    //     if (title.trim() !== "") {
-    //         callBack(title.trim(), todoListID);
-    //         setTitle("");
-    //     } else {
-    //         setError("Title is required");
-    //     }
-    // }
+    let [title, setTitle] = useState('')
 
     const onClickHandler = () => {
-        callBack (title)
+        callBack(title)
+        setTitle('')
     }
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
 
-    // const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    //     setError(null);
-    //     if (e.charCode === 13) {
-    //         addTask();
-    //     }
-    // }
-
     return (
         <div>
             <TextField
-                // className={error ? "error" : ""}
-                // onKeyPress={onKeyPressHandler}
                 size={'small'}
                 onChange={onChangeHandler}
                 value={title}
@@ -57,9 +39,6 @@ const AddItemForm = (props: AddItemFormPropsType) => {
             >
                 +
             </Button>
-
-
-            {error && <div className="error-message">{error}</div>}
         </div>
     );
 };

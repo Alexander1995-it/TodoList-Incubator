@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import AddItemForm from "../../common/AddItemForm/AddItemForm";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import s from '../../components/TodoList/TodoList.module.css'
+import style from '../../components/TodoList/TodoList.module.css'
 import {changeFilterAC, deleteTodolistsTC, TodolistDomainType} from "../../reducers/todoListsReducer";
 import {createTaskTC, fetchTasksTC} from "../../reducers/tasksReducer";
 import Task from "../Task/Task";
@@ -42,8 +42,8 @@ export const TodoList = (props: PropsType) => {
     if (props.todoList.filter === "completed") {
         tasks = tasks.filter(t => t.status === TaskStatuses.Completed);
     }
-    return <div className={s.todoListBlock}>
-        <div className={s.title__delete}>
+    return <div className={style.todoListBlock}>
+        <div className={style.title__delete}>
             <h3>{props.title}</h3>
             <IconButton
                 onClick={onClickDeleteTodoList}
@@ -56,7 +56,7 @@ export const TodoList = (props: PropsType) => {
             <AddItemForm label='Add task' disabled={props.todoList.entityStatus === 'loading'}
                          callBack={addTaskHandler}/>
         </div>
-        <ul>
+        <ul className={style.listTodo}>
             {
                 tasks.map(t => <Task key={t.id} task={t} todolistId={props.todoList.id}/>)
             }

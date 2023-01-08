@@ -6,6 +6,7 @@ import {TodoList} from "../TodoList/TodoList";
 import {useAppDispatch, useAppSelector} from "../../common/hooks/hooks";
 import {createTodolistTC, fetchTodolistsTC, TodolistDomainType} from "../../reducers/todoListsReducer";
 import {Navigate} from "react-router-dom";
+import style from './TodoLists.module.css'
 
 const TodoLists = () => {
 
@@ -29,10 +30,12 @@ const TodoLists = () => {
     }
     return (
         <div className='mainBlock'>
-            <AddItemForm label='Add todoList' callBack={addTodoList}/>
+           <div className={style.addTodolistBlock}>
+               <AddItemForm label='Add todoList' callBack={addTodoList}/>
+           </div>
             <Grid container spacing={3}>
                 {todoLists.map(el => {
-                    return <Grid item>
+                    return <Grid key={el.id} item>
                         <Paper style={{padding: '10px'}}>
                             <TodoList
                                 key={el.id}

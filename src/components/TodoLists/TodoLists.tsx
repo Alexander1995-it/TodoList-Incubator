@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import {TodoList} from "../TodoList/TodoList";
 import {useAppDispatch, useAppSelector} from "../../common/hooks/hooks";
-import {createTodolistTC, fetchTodolistsTC, TodolistDomainType} from "../../reducers/todoListsReducer";
+import {createTodolistTC, fetchTodolistsTC, TodolistDomainType} from "../../reducers/todolistsReducer";
 import {Navigate} from "react-router-dom";
 import style from './TodoLists.module.css'
 

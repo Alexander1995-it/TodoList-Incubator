@@ -7,7 +7,7 @@ import {RequestStatusType, setAppError, setAppStatus} from "./appReducer";
 
 const initialState: Array<TodolistDomainType> = []
 
-export const todoListsReducer = (state: Array<TodolistDomainType> = initialState, action: TodoListsActionType): Array<TodolistDomainType> => {
+export const todolistsReducer = (state: Array<TodolistDomainType> = initialState, action: TodoListsActionType): Array<TodolistDomainType> => {
     switch (action.type) {
         case 'SET_TODOLISTS': {
             return action.todolists.map(t => ({...t, filter: 'all', entityStatus: 'idle'}))

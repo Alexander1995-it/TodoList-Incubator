@@ -3,7 +3,7 @@ import AddItemForm from "../../common/AddItemForm/AddItemForm";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import style from '../../components/TodoList/TodoList.module.css'
-import {changeFilterAC, deleteTodolistsTC, TodolistDomainType} from "../../reducers/todoListsReducer";
+import {changeFilterAC, deleteTodolistsTC, TodolistDomainType} from "../../reducers/todolistsReducer";
 import {createTaskTC, fetchTasksTC} from "../../reducers/tasksReducer";
 import Task from "../Task/Task";
 import {useAppDispatch, useAppSelector} from "../../common/hooks/hooks";
